@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+sqlalchemy
+psycopg2-binary
+transformers
+torch
+scikit-learn
+spacy
+pypdf # <-- TAMBAHKAN INI

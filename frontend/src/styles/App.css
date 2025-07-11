@@ -1,0 +1,244 @@
+/* frontend/src/styles/App.css */
+
+/* Basic reset and body styling */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif; /* Menggunakan font Inter atau fallback sans-serif */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f0f2f5; /* Warna latar belakang aplikasi */
+    color: #333;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+/* Global container styling */
+.App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Memastikan aplikasi memenuhi tinggi viewport */
+}
+
+/* Dashboard Container (dari Dashboard.css, tapi bisa diintegrasikan di sini) */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Memenuhi tinggi viewport */
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+}
+
+.dashboard-header {
+    background-color: #0b53e3;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Upload & List | Summary */
+    gap: 20px;
+    padding: 20px;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+@media (max-width: 768px) {
+    .dashboard-content {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+        grid-template-rows: auto auto auto; /* Auto rows for each section */
+    }
+    .upload-section {
+        grid-column: 1 / 2;
+        grid-row: 1;
+    }
+    .documents-list-section {
+        grid-column: 1 / 2;
+        grid-row: 2;
+        max-height: 300px; /* Batasi tinggi daftar dokumen di mobile */
+    }
+    .summary-details-section {
+        grid-column: 1 / 2;
+        grid-row: 3;
+    }
+}
+
+
+.upload-section,
+.documents-list-section,
+.summary-details-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section {
+    grid-column: 1 / 2;
+}
+
+.documents-list-section {
+    grid-column: 1 / 2;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px); /* Sesuaikan tinggi agar scrollable */
+}
+
+.summary-details-section {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3; /* Membentang di dua baris */
+    overflow-y: auto;
+}
+
+h1, h2, h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Document Upload Styles */
+.document-upload-card input[type="file"] {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.document-upload-card p {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.document-upload-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Full width button */
+}
+
+.document-upload-card button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.document-upload-card button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Documents List Styles */
+.document-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.document-list li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-left 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95em;
+}
+
+.document-list li:last-child {
+    border-bottom: none;
+}
+
+.document-list li:hover {
+    background-color: #f9f9f9;
+}
+
+.document-list li.active {
+    background-color: #e6f7ff;
+    border-left: 4px solid #007bff;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Summary Display Styles */
+.summary-display-card {
+    padding: 20px;
+}
+
+.summary-text {
+    background-color: #f8f8f8;
+    border-left: 5px solid #007bff;
+    padding: 15px;
+    border-radius: 5px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 1em;
+}
+
+.entity-list, .keyword-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.entity-list li, .keyword-list li {
+    margin-bottom: 8px;
+    padding: 5px 0;
+    font-size: 0.95em;
+}
+
+.entity-list li strong, .keyword-list li strong {
+    color: #007bff;
+}
+
+.error-message {
+    color: #dc3545; /* Merah untuk pesan error */
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+.keyword-chart-container {
+    max-width: 100%;
+    height: 300px; /* Tinggi tetap untuk chart */
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .dashboard-content {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .upload-section,
+    .documents-list-section,
+    .summary-details-section {
+        padding: 15px;
+    }
+
+    .document-list li {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .summary-text {
+        font-size: 0.95em;
+    }
+}
