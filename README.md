@@ -4,9 +4,7 @@
 
 *Transforming Documents Into Actionable Insights Instantly*
 
-[![last commit](https://img.shields.io/badge/last%20commit-today-brightgreen)](#)
-[![python](https://img.shields.io/badge/python-43.5%25-blue)](#)
-[![languages](https://img.shields.io/badge/languages-5-informational)](#)
+
 
 *Built with the tools and technologies:*
 
