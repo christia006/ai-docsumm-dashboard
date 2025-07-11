@@ -47,6 +47,6 @@
 
 ---
 
-@christian J Hutahaean
+@christian Johannes Hutahaean
 
 </div>
