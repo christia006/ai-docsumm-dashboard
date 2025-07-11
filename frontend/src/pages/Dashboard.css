@@ -1,10 +1,8 @@
-/* Dashboard.css */
-
 .dashboard {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(90deg, #f0f4f8, #ffffff);
 }
 
@@ -22,6 +20,7 @@
     overflow: hidden;
 }
 
+/* Left panel default 30%, right panel flex */
 .left-panel {
     width: 30%;
     padding: 20px;
@@ -36,6 +35,7 @@
     overflow-y: auto;
 }
 
+/* List styling */
 .documents-list {
     list-style: none;
     padding: 0;
@@ -48,15 +48,16 @@
     align-items: center;
     background: white;
     margin-bottom: 8px;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .documents-list li:hover {
     background: #eef3f8;
+    transform: translateY(-1px);
 }
 
 .documents-list li.active {
@@ -64,27 +65,66 @@
 }
 
 .delete-btn {
-    background: transparent;
+    background: none;
     border: none;
     font-size: 18px;
     cursor: pointer;
     color: #cc0000;
-    transition: color 0.2s;
+    padding: 6px;
+    border-radius: 50%;
+    transition: background 0.2s, color 0.2s;
 }
 
 .delete-btn:hover {
+    background: rgba(255, 0, 0, 0.1);
     color: #ff3333;
 }
 
 .error {
     color: red;
+    margin-top: 10px;
 }
 
 .summary-paragraph {
     background: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     line-height: 1.6;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     white-space: pre-line;
+}
+
+/* Responsive for tablets and phones */
+@media (max-width: 992px) {
+    .dashboard-main {
+        flex-direction: column;
+    }
+
+    .left-panel {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .right-panel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-header h1 {
+        font-size: 20px;
+    }
+
+    .left-panel, .right-panel {
+        padding: 15px;
+    }
+
+    .documents-list li {
+        padding: 10px;
+    }
+
+    .delete-btn {
+        font-size: 20px;
+    }
 }
