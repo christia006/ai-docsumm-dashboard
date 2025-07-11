@@ -1,3 +1,5 @@
+<div align="center">
+
 # **AI-DOCSUMM-DASHBOARD**
 
 *Transforming Documents Into Actionable Insights Instantly*
@@ -23,6 +25,9 @@
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=github-actions&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=white)
 ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?logo=chart.js&logoColor=white)
+
+</div>
+
 
 ## 📌 Masalah Nyata & Solusinya
 
