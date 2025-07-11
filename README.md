@@ -30,6 +30,11 @@
 
 ---
 
+
+## 📸 Preview
+
+![Hasil Summarize](./images/hasil%20summarize.png)
+---
 @christian Johannes Hutahaean
 
 </div>
