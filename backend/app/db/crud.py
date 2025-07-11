@@ -32,3 +32,10 @@ def create_keyword(db: Session, keyword_data: schemas.KeywordCreate, document_id
     db.commit()
     db.refresh(db_keyword)
     return db_keyword
+
+def delete_document(db: Session, document_id: int):
+    doc = db.query(models.Document).filter(models.Document.id == document_id).first()
+    if doc:
+        db.delete(doc)
+        db.commit()
+

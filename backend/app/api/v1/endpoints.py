@@ -23,7 +23,6 @@ async def upload_and_summarize_document(
     db: Session = Depends(get_db)
 ):
     print(f"Received file content type: {file.content_type}")
-
     original_text = ""
     filename = file.filename
 
@@ -48,14 +47,10 @@ async def upload_and_summarize_document(
     if not original_text.strip():
         raise HTTPException(status_code=400, detail="Uploaded document is empty.")
 
-    # Summarize (pakai chunking, jadi meski panjang ringkasan tetap padat)
     summary = summarizer.summarize(original_text)
-
-    # Named entities & keywords
     entities = ner.extract_entities(original_text)
     keywords = keyword_extractor.extract_keywords(original_text)
 
-    # Save to DB
     doc_data = schemas_doc.DocumentCreate(
         filename=filename,
         original_text=original_text,
@@ -81,3 +76,11 @@ def read_document(document_id: int, db: Session = Depends(get_db)):
     if db_doc is None:
         raise HTTPException(status_code=404, detail="Document not found")
     return db_doc
+
+@router.delete("/documents/{document_id}")
+def delete_document(document_id: int, db: Session = Depends(get_db)):
+    db_doc = crud.get_document(db, document_id=document_id)
+    if db_doc is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+    crud.delete_document(db, document_id)
+    return {"detail": "Document deleted successfully"}

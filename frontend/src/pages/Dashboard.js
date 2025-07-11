@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import DocumentUpload from '../components/DocumentUpload';
 import SummaryDisplay from '../components/SummaryDisplay';
-import { getDocuments, getDocumentById } from '../api';
-import './Dashboard.css'; // Untuk styling dashboard
+import { getDocuments, getDocumentById, deleteDocument } from '../api';
+import './Dashboard.css';
 
 function Dashboard() {
     const [documents, setDocuments] = useState([]);
@@ -28,9 +28,8 @@ function Dashboard() {
     }, []);
 
     const handleDocumentSummarized = (newDocument) => {
-        // Tambahkan dokumen baru ke daftar
         setDocuments((prevDocs) => [newDocument, ...prevDocs]);
-        setSelectedDocument(newDocument); // Otomatis tampilkan ringkasan dokumen baru
+        setSelectedDocument(newDocument);
     };
 
     const handleDocumentSelect = async (docId) => {
@@ -43,44 +42,61 @@ function Dashboard() {
         }
     };
 
+    const handleDeleteDocument = async (docId) => {
+        if (!window.confirm("Are you sure you want to delete this document?")) return;
+        try {
+            await deleteDocument(docId);
+            setDocuments((prevDocs) => prevDocs.filter((doc) => doc.id !== docId));
+            if (selectedDocument?.id === docId) {
+                setSelectedDocument(null);
+            }
+        } catch (err) {
+            console.error("Error deleting document:", err);
+            setError("Failed to delete document.");
+        }
+    };
+
     return (
-        <div className="dashboard-container">
+        <div className="dashboard">
             <header className="dashboard-header">
-                <h1>AI Document Summarizer Dashboard</h1>
+                <h1>📄 AI Document Summarizer</h1>
             </header>
 
-            <div className="dashboard-content">
-                <div className="upload-section">
+            <main className="dashboard-main">
+                <section className="left-panel">
                     <DocumentUpload onDocumentSummarized={handleDocumentSummarized} />
-                </div>
-
-                <div className="documents-list-section">
-                    <h2>Summarized Documents</h2>
+                    <h2>📚 Summarized Documents</h2>
                     {loadingDocuments ? (
                         <p>Loading documents...</p>
                     ) : error ? (
-                        <p className="error-message">{error}</p>
+                        <p className="error">{error}</p>
                     ) : documents.length === 0 ? (
-                        <p>No documents summarized yet. Upload one!</p>
+                        <p>No documents summarized yet.</p>
                     ) : (
-                        <ul className="document-list">
+                        <ul className="documents-list">
                             {documents.map((doc) => (
-                                <li
-                                    key={doc.id}
-                                    onClick={() => handleDocumentSelect(doc.id)}
-                                    className={selectedDocument?.id === doc.id ? 'active' : ''}
-                                >
-                                    {doc.filename} ({new Date(doc.uploaded_at).toLocaleDateString()})
+                                <li key={doc.id} className={selectedDocument?.id === doc.id ? 'active' : ''}>
+                                    <div onClick={() => handleDocumentSelect(doc.id)}>
+                                        <strong>{doc.filename}</strong><br />
+                                        <small>{new Date(doc.uploaded_at).toLocaleDateString()}</small>
+                                    </div>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => handleDeleteDocument(doc.id)}
+                                        title="Delete document"
+                                    >
+                                        🗑️
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     )}
-                </div>
+                </section>
 
-                <div className="summary-details-section">
+                <section className="right-panel">
                     <SummaryDisplay document={selectedDocument} />
-                </div>
-            </div>
+                </section>
+            </main>
         </div>
     );
 }

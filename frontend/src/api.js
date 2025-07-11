@@ -19,12 +19,10 @@ export const uploadDocument = (file) => {
     });
 };
 
-export const getDocuments = () => {
-    return api.get('/documents/');
-};
+export const getDocuments = () => api.get('/documents/');
 
-export const getDocumentById = (id) => {
-    return api.get(`/documents/${id}`);
-};
+export const getDocumentById = (id) => api.get(`/documents/${id}`);
+
+export const deleteDocument = (id) => api.delete(`/documents/${id}`);
 
 export default api;

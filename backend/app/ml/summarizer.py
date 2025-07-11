@@ -1,41 +1,48 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import pipeline
 import torch
-from fastapi import HTTPException
 
 class DocumentSummarizer:
-    def __init__(self, model_name="facebook/bart-large-cnn"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model.to(self.device)
-        self.max_char_length = 4000  # chunk size
+    def __init__(self):
+        # Deteksi device otomatis (cuda jika ada, jika tidak pakai cpu)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"Device set to: {self.device}")
 
-    def _summarize_chunk(self, text_chunk: str) -> str:
-        inputs = self.tokenizer(
-            text_chunk,
-            max_length=self.tokenizer.model_max_length,
-            truncation=True,
-            return_tensors="pt"
-        ).to(self.device)
-        summary_ids = self.model.generate(
-            inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
-            max_length=150,
-            min_length=30,
-            num_beams=4,
-            early_stopping=True
+        # Inisialisasi pipeline summarizer
+        # Model facebook/bart-large-cnn cocok untuk summarization panjang
+        self.summarizer = pipeline(
+            "summarization",
+            model="facebook/bart-large-cnn",
+            device=0 if torch.cuda.is_available() else -1
         )
-        return self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
 
-    def summarize(self, text: str) -> str:
-        if len(text) <= self.max_char_length:
-            return self._summarize_chunk(text)
+    def chunk_text(self, text, max_words=500):
+        """
+        Memecah teks panjang menjadi potongan (chunk) berisi max_words kata.
+        """
+        words = text.split()
+        for i in range(0, len(words), max_words):
+            yield " ".join(words[i:i+max_words])
 
-        chunks = [text[i:i+self.max_char_length] for i in range(0, len(text), self.max_char_length)]
+    def summarize(self, text):
+        """
+        Summarize teks panjang: pecah jadi chunk, ringkas per chunk,
+        lalu gabungkan hasil ringkasan jadi satu ringkasan panjang.
+        """
+        # Pecah teks panjang menjadi chunk kecil
+        chunks = list(self.chunk_text(text, max_words=500))
         summaries = []
+
         for idx, chunk in enumerate(chunks):
-            try:
-                summaries.append(self._summarize_chunk(chunk))
-            except Exception as e:
-                print(f"Failed to summarize chunk {idx}: {e}")
-        return " ".join(summaries).strip()
+            print(f"Summarizing chunk {idx+1}/{len(chunks)}...")
+            summary_result = self.summarizer(
+                chunk,
+                max_length=150,   # Sesuaikan jika mau ringkasan lebih panjang
+                min_length=50,
+                do_sample=False
+            )
+            # Ambil hasil ringkasan dan tambahkan ke list
+            summaries.append(summary_result[0]['summary_text'].strip())
+
+        # Gabungkan semua ringkasan menjadi 1 teks seperti paragraf panjang
+        final_summary = " ".join(summaries)
+        return final_summary
