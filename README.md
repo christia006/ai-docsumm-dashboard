@@ -1,6 +1,6 @@
 <div align="center">
 
-# **AI-DOCSUMM-DASHBOARD**
+# **SummAIze**
 
 *Transforming Documents Into Actionable Insights Instantly*
 
